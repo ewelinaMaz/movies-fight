@@ -1,23 +1,27 @@
 const fetchData = async (searchTerm) => {
-    const response = await axios.get('http://www.omdbapi.com/', {
-        params: {
-            apikey: '87615f27',
-            s: searchTerm
-        }
-    });
-
+  const response = await axios.get("http://www.omdbapi.com/", {
+    params: {
+      apikey: "87615f27",
+      s: searchTerm,
+    },
+  });
 };
 
-const input = document.querySelector('input');
+const input = document.querySelector("input");
 
-let timeoutId;
-const onInput = (event) => {
+const debounce = (func) => {
+  let timeoutId;
+  return (...args) => {
     if (timeoutId) {
-        clearTimeout(timeoutId)
+      clearTimeout(timeoutId);
     }
-   timeout = setTimeout(() => {
-        fetchData(event.target.value);
-    }, 500);  
+    timeoutId = setTimeout(() => {
+      func.apply(null, args);
+    }, 1000);
+  };
 };
+const onInput = debounce(event => {
+    fetchData(event.target.value);
+});
 
-input.addEventListener('input', onInput);
+input.addEventListener("input", onInput);
